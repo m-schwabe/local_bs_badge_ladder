@@ -102,7 +102,7 @@ if ($mode == 1) {
 
     $table->colclasses = array('name', 'number');
 
-    // Get badges in right sort order.
+    // Get available badges.
     $sql = "SELECT id
               FROM {badge}
              WHERE status IN (1,3) and
@@ -110,11 +110,24 @@ if ($mode == 1) {
                    .$coursesql;
 
     $params = array($type);
-    $badges = $DB->get_recordset_sql($sql, $params, $start, $perpage);
+    $badges = $DB->get_records_sql($sql, $params);
     $courseid = $type == 1 ? null : $courseid;
-    $badgescount = $DB->count_records('badge', array('type' => $type, 'courseid' => $courseid));
 
-    foreach ($badges as $b) {
+    $count = 0;
+    foreach ($badges as $badge) {
+        $count++;
+        $numbercount = $DB->count_records('badge_issued', array('badgeid' => $badge->id));
+        $badge->badgescount = $numbercount;
+	}
+
+    usort($badges, function($a, $b) {
+        return strcmp((string)$b->badgescount, (string)$a->badgescount);
+    });
+
+    $badgesubset = array_slice($badges, $start, $perpage);
+    unset($badges); // Release some memory.
+
+    foreach ($badgesubset as $b) {
 
         $badge = new badge($b->id);
         $linktext = print_badge_image($badge, $context). ' '.
@@ -126,10 +139,6 @@ if ($mode == 1) {
         $row = array($name, $number);
         $table->data[] = $row;
     }
-    // Free up some resources in the RDBMS after using $DB->get_recordset.
-    $badges->close();
-
-    $count = $badgescount;
 
 // Print ladder 'number of badges owned by students'.
 } else if ($mode == 2) {

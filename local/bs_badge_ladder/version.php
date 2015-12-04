@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015082001;              // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2015120400;              // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2015050500;              // Requires this Moodle version. (2.9)
 $plugin->component = 'local_bs_badge_ladder'; // Full name of the plugin (used for diagnostics).
+$plugin->release   = '1.1 (2015120400)';
+$plugin->maturity  = MATURITY_STABLE;
