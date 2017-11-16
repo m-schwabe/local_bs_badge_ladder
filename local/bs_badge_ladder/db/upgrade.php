@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Post-install code for badge ladder plugin
+ * Upgrade handler for badge ladder plugin
  *
  * @package    local_bs_badge_ladder
  * @copyright  2015 onwards Matthias Schwabe {@link http://matthiasschwa.be}
@@ -24,24 +24,32 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Code run after the bs_badge_ladder module database tables has been created.
- *
- * @return bool
- */
-function xmldb_local_bs_badge_ladder_install() {
+function xmldb_local_bs_badge_ladder_upgrade($oldversion) {
     global $DB;
 
-    $courses = $DB->get_records('course', null, '', 'id');
+	$dbman = $DB->get_manager();
+	$courses = $DB->get_records('course', null, '', 'id');
 
-    foreach ($courses as $course) {
+    if ($oldversion < 2017080400) {
+        
+		$table = new xmldb_table('local_badge_ladder');
+        $field = new xmldb_field('perpage');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'anonymize');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
-        $record = new stdClass();
-        $record->courseid = $course->id;
-        $record->status = 0;
-		$record->anonymize = 0;
-		$record->perpage = 20;
-        $DB->insert_record('local_badge_ladder', $record, false);
+		foreach ($courses as $course) {
+
+			$record = new stdClass();
+			$record->id = $DB->get_field('local_badge_ladder', 'id', array('courseid' => $course->id));
+			$record->courseid = $course->id;
+			$record->perpage = 20;
+			$DB->update_record('local_badge_ladder', $record);
+		}
+		
+		upgrade_plugin_savepoint(true, 2017080400, 'local', 'local_bs_badge_ladder');
+
     }
 
     return true;

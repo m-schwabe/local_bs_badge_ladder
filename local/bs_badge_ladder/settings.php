@@ -15,20 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Global settings for badge ladder plugin.
+ * Global settings for badge ladder plugin
  *
- * @package local_bs_badge_ladder
- * @author Matthias Schwabe <mail@matthiasschwabe.de>
- * @copyright 2015 Matthias Schwabe
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package    local_bs_badge_ladder
+ * @copyright  2015 onwards Matthias Schwabe {@link http://matthiasschwa.be}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
+	
+	$ADMIN->add('localplugins', new admin_category('local_bs_badge_ladder_folder',
+                get_string('pluginname', 'local_bs_badge_ladder')));
 
-    $settings = new admin_settingpage('local_bs_badge_ladder', get_string('pluginname', 'local_bs_badge_ladder'));
+	$settings = new admin_settingpage('local_bs_badge_ladder', get_string('configuration', 'local_bs_badge_ladder'));
 
+
+	// Site badge ladder.
     $settings->add(new admin_setting_heading('local_bs_badge_ladder_systemladder',
         get_string('systemladderhead', 'local_bs_badge_ladder'), ''));
 
@@ -39,6 +43,12 @@ if ($hassiteconfig) {
         get_string('anonymizesystemstudentbadgeladder', 'local_bs_badge_ladder'),
         get_string('anonymizesystemstudentbadgeladderinfo', 'local_bs_badge_ladder'), 1));
 
+	$settings->add(new admin_setting_configtext('local_bs_badge_ladder/systembadgeladderperpage',
+		get_string('sitebadgeladderperpage', 'local_bs_badge_ladder'),
+        get_string('sitebadgeladderperpagedesc', 'local_bs_badge_ladder'), 10, PARAM_INT));
+
+
+	// Course badge ladder.
     $settings->add(new admin_setting_heading('local_bs_badge_ladder_courseladder',
         get_string('courseladderhead', 'local_bs_badge_ladder'), ''));
 
@@ -63,5 +73,11 @@ if ($hassiteconfig) {
         get_string('anonymizestudentladderdefault', 'local_bs_badge_ladder'),
         get_string('anonymizestudentladderdefaultinfo', 'local_bs_badge_ladder'), '0', $options2));
 
-    $ADMIN->add('localplugins', $settings);
+
+	$ADMIN->add('local_bs_badge_ladder_folder', $settings);
+
+    $ADMIN->add('local_bs_badge_ladder_folder', new admin_externalpage('local_bs_badge_ladder_about',
+                get_string('about', 'local_bs_badge_ladder'),
+                new moodle_url('/local/bs_badge_ladder/about.php')));
+
 }

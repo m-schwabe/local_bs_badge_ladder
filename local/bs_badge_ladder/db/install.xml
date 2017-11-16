@@ -9,7 +9,8 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="courseid"/>
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" NEXT="status" PREVIOUS="id"/>
 		<FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" NEXT="anonymize" PREVIOUS="courseid"/>
-		<FIELD NAME="anonymize" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" PREVIOUS="status"/>
+		<FIELD NAME="anonymize" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" NEXT="perpage" PREVIOUS="status"/>
+		<FIELD NAME="perpage" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="anonymize"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

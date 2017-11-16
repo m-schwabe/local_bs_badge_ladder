@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Displays the badge ladder.
+ * Displays the badge ladder
  *
- * @package local_bs_badge_ladder
- * @author Matthias Schwabe <mail@matthiasschwabe.de>
- * @copyright 2015 Matthias Schwabe
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package    local_bs_badge_ladder
+ * @copyright  2015 onwards Matthias Schwabe {@link http://matthiasschwa.be}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(__FILE__).'/lib.php');
@@ -34,7 +33,7 @@ $params = array('id' => $courseid, 'type' => $type, 'mode' => $mode);
 $PAGE->set_url(new moodle_url('/local/bs_badge_ladder/index.php', $params));
 $PAGE->navbar->add(get_string('pluginname', 'local_bs_badge_ladder'));
 
-$perpage = 20;
+$perpage = $type == 1 ? get_config('local_bs_badge_ladder')->systembadgeladderperpage : $DB->get_field('local_badge_ladder', 'perpage', array('courseid' => $courseid));
 $start = $page == 0 ? 0 : $page * $perpage;
 $tabs = array();
 
@@ -63,6 +62,24 @@ if ($type == 1) {
     $PAGE->set_pagelayout('incourse');
     $PAGE->set_heading($course->fullname);
     $PAGE->set_title($course->fullname. ': ' .get_string('pluginname', 'local_bs_badge_ladder'));
+
+	$config = $DB->get_record('local_badge_ladder', array('courseid' => $courseid), '*', MUST_EXIST);
+    $form = new local_bs_badge_ladder_form($PAGE->url, array('config' => $config));
+
+	if ($data = $form->get_data()) {
+
+        $config->status = $data->enablecoursebadgeladder;
+		$config->perpage = $data->coursebadgeladderperpage;
+		if (get_config('local_bs_badge_ladder')->anonymizestudentbadgeladder) {
+            $config->anonymize = $data->anonymizestudentbadgeladder;
+        } else {
+            $config->anonymize = 0;
+        }
+        $DB->update_record('local_badge_ladder', $config);
+
+        redirect($PAGE->url);
+    }
+
     echo $OUTPUT->header();
 
     $coursesql = ' and courseid = '.$courseid;
@@ -120,8 +137,10 @@ if ($mode == 1) {
         $badge->badgescount = $numbercount;
 	}
 
-    usort($badges, function($a, $b) {
-        return strcmp((string)$b->badgescount, (string)$a->badgescount);
+    usort($badges, function($b, $a) {
+        if ((int)$a->badgescount == (int)$b->badgescount) return  0;
+		if ((int)$a->badgescount  > (int)$b->badgescount) return  1;
+		if ((int)$a->badgescount  < (int)$b->badgescount) return -1;
     });
 
     $badgesubset = array_slice($badges, $start, $perpage);
@@ -175,8 +194,10 @@ if ($mode == 1) {
 			$student->badgescount = $badgescount;
 	
 	}
-	usort($students, function($a, $b) {
-		return strcmp((string)$b->badgescount, (string)$a->badgescount);
+	usort($students, function($b, $a) {
+		if ((int)$a->badgescount == (int)$b->badgescount) return  0;
+		if ((int)$a->badgescount  > (int)$b->badgescount) return  1;
+		if ((int)$a->badgescount  < (int)$b->badgescount) return -1;
 	});
 	
 	$studentsubset = array_slice($students, $start, $perpage);
@@ -246,25 +267,10 @@ if ($mode == 1) {
 } else if ($mode == 3 and $type == 2) {
 
     require_capability('local/bs_badge_ladder:managecourseladder', $context);
-    $config = $DB->get_record('local_badge_ladder', array('courseid' => $courseid), '*', MUST_EXIST);
-    $form = new local_bs_badge_ladder_form($PAGE->url, array('config' => $config));
 
     echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
     $form->display();
     echo $OUTPUT->box_end();
-
-    if ($data = $form->get_data()) {
-
-        $config->status = $data->enablecoursebadgeladder;
-		if (get_config('local_bs_badge_ladder')->anonymizestudentbadgeladder) {
-            $config->anonymize = $data->anonymizestudentbadgeladder;
-        } else {
-            $config->anonymize = 0;
-        }
-        $DB->update_record('local_badge_ladder', $config);
-
-        redirect($PAGE->url);
-    }
 
 } else {
     die;

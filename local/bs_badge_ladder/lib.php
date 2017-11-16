@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The library file for badge ladder plugin.
+ * Library file for badge ladder plugin
  *
- * @package local_bs_badge_ladder
- * @author Matthias Schwabe <mail@matthiasschwabe.de>
- * @copyright 2015 Matthias Schwabe
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package    local_bs_badge_ladder
+ * @copyright  2015 onwards Matthias Schwabe {@link http://matthiasschwa.be}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // Some file imports.
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once($CFG->libdir.'/badgeslib.php');
 require_once($CFG->libdir.'/formslib.php');
+require_once($CFG->libdir.'/adminlib.php');
 
 function local_bs_badge_ladder_extend_navigation ($nav) {
     global $PAGE, $DB, $CFG;
@@ -65,6 +65,7 @@ function local_bs_badge_ladder_extend_navigation ($nav) {
     }
 }
 
+// Edit form for course badge ladder
 class local_bs_badge_ladder_form extends moodleform {
 
     public function definition() {
@@ -83,22 +84,39 @@ class local_bs_badge_ladder_form extends moodleform {
             $mform->setDefault('anonymizestudentbadgeladder',
 			    get_config('local_bs_badge_ladder')->anonymizestudentbadgeladderdefault);
         }
+		
+		$mform->addElement('text', 'coursebadgeladderperpage',
+            get_string('coursebadgeladderperpage', 'local_bs_badge_ladder'), array('maxlength' => '3', 'size' => '3'));
+		$mform->setType('coursebadgeladderperpage', PARAM_INT);
+        $mform->setDefault('coursebadgeladderperpage', 20);
+		$mform->addRule('coursebadgeladderperpage', get_string('notnegativenumericvalue', 'local_bs_badge_ladder'), 'numeric', null, 'client');
+		$mform->addRule('coursebadgeladderperpage', get_string('requiredvalue', 'local_bs_badge_ladder'), 'required', null, 'client');
 
         $this->add_action_buttons();
         $this->set_data($config);
     }
+	
+	public function validation($data, $files) {
+		$errors = array();
+		if ($data['coursebadgeladderperpage'] < 1) {
+			$errors['coursebadgeladderperpage'] = get_string('notnegativenumericvalue', 'local_bs_badge_ladder');
+		}
+		return $errors;
+	}
 
     public function set_data($config) {
         global $COURSE, $DB;
 
         parent::set_data($config);
 
-        $defaultvalues = array();
-        $defaultvalues['enablecoursebadgeladder'] = $DB->get_field('local_badge_ladder', 'status',
+        $values = array();
+        $values['enablecoursebadgeladder'] = $DB->get_field('local_badge_ladder', 'status',
             array('courseid' => $COURSE->id), MUST_EXIST);
-        $defaultvalues['anonymizestudentbadgeladder'] = $DB->get_field('local_badge_ladder', 'anonymize',
+        $values['anonymizestudentbadgeladder'] = $DB->get_field('local_badge_ladder', 'anonymize',
+            array('courseid' => $COURSE->id), MUST_EXIST);
+		$values['coursebadgeladderperpage'] = $DB->get_field('local_badge_ladder', 'perpage',
             array('courseid' => $COURSE->id), MUST_EXIST);
 
-        parent::set_data($defaultvalues);
+        parent::set_data($values);
     }
 }

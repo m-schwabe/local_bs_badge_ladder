@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language file.
+ * Language file for badge ladder plugin
  *
- * @package local_bs_badge_ladder
- * @author Matthias Schwabe <mail@matthiasschwabe.de>
- * @copyright 2015 Matthias Schwabe
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package    local_bs_badge_ladder
+ * @copyright  2015 onwards Matthias Schwabe {@link http://matthiasschwa.be}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['pluginname'] = 'Badge Ladder';
@@ -55,3 +54,12 @@ $string['systemladderhead'] = 'Site badge ladder';
 $string['courseladderhead'] = 'Course badge ladder';
 $string['anonymizesystemstudentbadgeladder'] = 'Anonymize useres in site student badge ladder';
 $string['anonymizesystemstudentbadgeladderinfo'] = 'When activated users can only see their own names in the site student badge ladder. PLEASE NOTE: Even if deactivated users still needs the capability moodle/site:viewparticipants in system context.';
+$string['coursebadgeladderperpage'] = 'Number of displayed table rows per page';
+$string['sitebadgeladderperpage'] = 'Number of displayed table rows per page';
+$string['sitebadgeladderperpagedesc'] = '';
+$string['about'] = 'About';
+$string['notnegativenumericvalue'] = 'Please enter a not negative numeric value greater than 0.';
+$string['requiredvalue'] = 'Please enter a value.';
+$string['configuration'] = 'Configuration';
+$string['donationtext'] = 'If you like this plugin and want to support my work please feel free to use this Paypal donation button:';
+$string['abouttext'] = 'This plugin has been developed by Matthias Schwabe and is part of a Moodle badges related set of plugins.<br />Other plugins of this set are {$a->badgeenrol}, {$a->badgepool} and {$a->recentbadges}.';

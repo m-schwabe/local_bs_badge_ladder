@@ -15,17 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details for badge ladder plugin
  *
- * @package local_bs_badge_ladder
- * @author Matthias Schwabe <mail@matthiasschwabe.de>
- * @copyright 2015 Matthias Schwabe
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package    local_bs_badge_ladder
+ * @copyright  2015 onwards Matthias Schwabe {@link http://matthiasschwa.be}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015120400;              // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2017080406;              // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2015050500;              // Requires this Moodle version. (2.9)
 $plugin->component = 'local_bs_badge_ladder'; // Full name of the plugin (used for diagnostics).
 $plugin->release   = '1.1 (2015120400)';
