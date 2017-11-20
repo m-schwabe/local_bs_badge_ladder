@@ -63,3 +63,5 @@ $string['requiredvalue'] = 'Please enter a value.';
 $string['configuration'] = 'Configuration';
 $string['donationtext'] = 'If you like this plugin and want to support my work please feel free to use this Paypal donation button:';
 $string['abouttext'] = 'This plugin has been developed by Matthias Schwabe and is part of a Moodle badges related set of plugins.<br />Other plugins of this set are {$a->badgeenrol}, {$a->badgepool} and {$a->recentbadges}.';
+$string['aboutfeedbacktext'] = 'If you have any feedback or great ideas for new features, do not hesitate to leave a post on the {$a->aboutlink} or send me an e-mail to {$a->aboutmail}.<br /><br />';
+$string['plugindirectory'] = 'Moodle plugin directory page';

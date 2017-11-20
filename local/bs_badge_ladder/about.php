@@ -52,9 +52,11 @@ $params = array('badgeenrol' => html_writer::link('https://moodle.org/plugins/en
 $paypalbox = html_writer::div($paypalhtml, 'donation-button');
 $abouttext = html_writer::div(get_string('abouttext', 'local_bs_badge_ladder', $params), 'about-text');
 $donationtext = html_writer::div(get_string('donationtext', 'local_bs_badge_ladder'), 'donation-text');
-$aboutmail = html_writer::div('E-mail: moodle@matthiasschwa.be', 'about-mail');
-$aboutweb = html_writer::div('Web: www.matthiasschwa.be', 'about-web');
 
-echo $OUTPUT->box($abouttext.$donationtext.$paypalbox.$aboutmail.$aboutweb ,'about-box');
+$params = array('aboutlink' => html_writer::link('https://moodle.org/plugins/local_bs_badge_ladder', get_string('plugindirectory', 'local_bs_badge_ladder'), array('target' => '_blank')),
+    'aboutmail' => html_writer::link('mailto:moodle@matthiasschwa.be', 'moodle@matthiasschwa.be'));
 
+$aboutfeedback = html_writer::div(get_string('aboutfeedbacktext', 'local_bs_badge_ladder', $params), 'aboutfeedback-text');
+
+echo $OUTPUT->box($abouttext.$aboutfeedback.$donationtext.$paypalbox, 'about-box');
 echo $OUTPUT->footer();
