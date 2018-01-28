@@ -33,7 +33,8 @@ $params = array('id' => $courseid, 'type' => $type, 'mode' => $mode);
 $PAGE->set_url(new moodle_url('/local/bs_badge_ladder/index.php', $params));
 $PAGE->navbar->add(get_string('pluginname', 'local_bs_badge_ladder'));
 
-$perpage = $type == 1 ? get_config('local_bs_badge_ladder')->systembadgeladderperpage : $DB->get_field('local_badge_ladder', 'perpage', array('courseid' => $courseid));
+$perpage = $type == 1 ? get_config('local_bs_badge_ladder')->systembadgeladderperpage :
+    $DB->get_field('local_badge_ladder', 'perpage', array('courseid' => $courseid));
 $start = $page == 0 ? 0 : $page * $perpage;
 $tabs = array();
 
@@ -63,14 +64,14 @@ if ($type == 1) {
     $PAGE->set_heading($course->fullname);
     $PAGE->set_title($course->fullname. ': ' .get_string('pluginname', 'local_bs_badge_ladder'));
 
-	$config = $DB->get_record('local_badge_ladder', array('courseid' => $courseid), '*', MUST_EXIST);
+    $config = $DB->get_record('local_badge_ladder', array('courseid' => $courseid), '*', MUST_EXIST);
     $form = new local_bs_badge_ladder_form($PAGE->url, array('config' => $config));
 
-	if ($data = $form->get_data()) {
+    if ($data = $form->get_data()) {
 
         $config->status = $data->enablecoursebadgeladder;
-		$config->perpage = $data->coursebadgeladderperpage;
-		if (get_config('local_bs_badge_ladder')->anonymizestudentbadgeladder) {
+        $config->perpage = $data->coursebadgeladderperpage;
+        if (get_config('local_bs_badge_ladder')->anonymizestudentbadgeladder) {
             $config->anonymize = $data->anonymizestudentbadgeladder;
         } else {
             $config->anonymize = 0;
@@ -135,12 +136,12 @@ if ($mode == 1) {
         $count++;
         $numbercount = $DB->count_records('badge_issued', array('badgeid' => $badge->id));
         $badge->badgescount = $numbercount;
-	}
+    }
 
     usort($badges, function($b, $a) {
-        if ((int)$a->badgescount == (int)$b->badgescount) return  0;
-		if ((int)$a->badgescount  > (int)$b->badgescount) return  1;
-		if ((int)$a->badgescount  < (int)$b->badgescount) return -1;
+        if ((int)$a->badgescount == (int)$b->badgescount) { return  0; }
+        if ((int)$a->badgescount  > (int)$b->badgescount) { return  1; }
+        if ((int)$a->badgescount  < (int)$b->badgescount) { return -1; }
     });
 
     $badgesubset = array_slice($badges, $start, $perpage);
@@ -182,25 +183,25 @@ if ($mode == 1) {
         $badgecourseid = $courseid;
     }
 
-	foreach ($students as $student) {
+    foreach ($students as $student) {
 
-            $studentbadges = $DB->get_records('badge_issued', array('userid' => $student->id));
-            $badgescount = 0;
-            foreach ($studentbadges as $sb) {
-                if ($DB->get_record('badge', array('id' => $sb->badgeid, 'courseid' => $badgecourseid))) {
-                    $badgescount++;
-                }
+        $studentbadges = $DB->get_records('badge_issued', array('userid' => $student->id));
+        $badgescount = 0;
+        foreach ($studentbadges as $sb) {
+            if ($DB->get_record('badge', array('id' => $sb->badgeid, 'courseid' => $badgecourseid))) {
+                $badgescount++;
             }
-			$student->badgescount = $badgescount;
-	
-	}
-	usort($students, function($b, $a) {
-		if ((int)$a->badgescount == (int)$b->badgescount) return  0;
-		if ((int)$a->badgescount  > (int)$b->badgescount) return  1;
-		if ((int)$a->badgescount  < (int)$b->badgescount) return -1;
-	});
-	
-	$studentsubset = array_slice($students, $start, $perpage);
+        }
+        $student->badgescount = $badgescount;
+
+    }
+    usort($students, function($b, $a) {
+        if ((int)$a->badgescount == (int)$b->badgescount) { return  0; }
+        if ((int)$a->badgescount  > (int)$b->badgescount) { return  1; }
+        if ((int)$a->badgescount  < (int)$b->badgescount) { return -1; }
+    });
+
+    $studentsubset = array_slice($students, $start, $perpage);
     unset($students); // Release some memory.
 
     $table->head = array(get_string('name'));
@@ -232,7 +233,7 @@ if ($mode == 1) {
             } else {
                 $anonymize = get_config('local_bs_badge_ladder')->anonymizesystemstudentbadgeladder;
             }
-	
+
             if ($type == 1 ) {
                 $capability = has_capability('moodle/site:viewparticipants', $context);
             } else {
@@ -242,7 +243,7 @@ if ($mode == 1) {
             if (($anonymize or !$capability)
                 and $student->id != $USER->id) {
                     $name = get_string('anonymizedname', 'local_bs_badge_ladder');
-		    } else {
+            } else {
                 $userpic = $OUTPUT->user_picture($student, array('size' => 35, 'courseid' => $courseid));
                 $fullnameclass = $student->id == $USER->id ? 'fullnameself' : 'fullname';
                 $linktext = html_writer::start_tag('span', array('class' => $fullnameclass)).fullname($student)

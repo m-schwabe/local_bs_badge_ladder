@@ -35,8 +35,8 @@ class local_bs_badge_ladder_observer {
         $config = new stdClass();
         $config->courseid = $event->objectid;
         $config->status = get_config('local_bs_badge_ladder')->courseladderdefault;
-		$config->anonymize = get_config('local_bs_badge_ladder')->anonymizestudentbadgeladderdefault;
-		$config->perpage = 10;
+        $config->anonymize = get_config('local_bs_badge_ladder')->anonymizestudentbadgeladderdefault;
+        $config->perpage = 10;
         $DB->insert_record('local_badge_ladder', $config);
     }
 }

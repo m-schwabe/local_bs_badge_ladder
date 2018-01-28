@@ -39,8 +39,8 @@ function xmldb_local_bs_badge_ladder_install() {
         $record = new stdClass();
         $record->courseid = $course->id;
         $record->status = 0;
-		$record->anonymize = 0;
-		$record->perpage = 20;
+        $record->anonymize = 0;
+        $record->perpage = 20;
         $DB->insert_record('local_badge_ladder', $record, false);
     }
 

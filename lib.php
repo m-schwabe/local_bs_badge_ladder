@@ -65,7 +65,7 @@ function local_bs_badge_ladder_extend_navigation ($nav) {
     }
 }
 
-// Edit form for course badge ladder
+// Edit form for course badge ladder.
 class local_bs_badge_ladder_form extends moodleform {
 
     public function definition() {
@@ -82,27 +82,29 @@ class local_bs_badge_ladder_form extends moodleform {
             $mform->addElement('advcheckbox', 'anonymizestudentbadgeladder',
                 get_string('anonymizestudentbadgeladder', 'local_bs_badge_ladder'), '', null, array(0, 1));
             $mform->setDefault('anonymizestudentbadgeladder',
-			    get_config('local_bs_badge_ladder')->anonymizestudentbadgeladderdefault);
+                get_config('local_bs_badge_ladder')->anonymizestudentbadgeladderdefault);
         }
-		
-		$mform->addElement('text', 'coursebadgeladderperpage',
+
+        $mform->addElement('text', 'coursebadgeladderperpage',
             get_string('coursebadgeladderperpage', 'local_bs_badge_ladder'), array('maxlength' => '3', 'size' => '3'));
-		$mform->setType('coursebadgeladderperpage', PARAM_INT);
+        $mform->setType('coursebadgeladderperpage', PARAM_INT);
         $mform->setDefault('coursebadgeladderperpage', 20);
-		$mform->addRule('coursebadgeladderperpage', get_string('notnegativenumericvalue', 'local_bs_badge_ladder'), 'numeric', null, 'client');
-		$mform->addRule('coursebadgeladderperpage', get_string('requiredvalue', 'local_bs_badge_ladder'), 'required', null, 'client');
+        $mform->addRule('coursebadgeladderperpage', get_string('notnegativenumericvalue', 'local_bs_badge_ladder'),
+            'numeric', null, 'client');
+        $mform->addRule('coursebadgeladderperpage', get_string('requiredvalue', 'local_bs_badge_ladder'),
+            'required', null, 'client');
 
         $this->add_action_buttons();
         $this->set_data($config);
     }
-	
-	public function validation($data, $files) {
-		$errors = array();
-		if ($data['coursebadgeladderperpage'] < 1) {
-			$errors['coursebadgeladderperpage'] = get_string('notnegativenumericvalue', 'local_bs_badge_ladder');
-		}
-		return $errors;
-	}
+
+    public function validation($data, $files) {
+        $errors = array();
+        if ($data['coursebadgeladderperpage'] < 1) {
+            $errors['coursebadgeladderperpage'] = get_string('notnegativenumericvalue', 'local_bs_badge_ladder');
+        }
+        return $errors;
+    }
 
     public function set_data($config) {
         global $COURSE, $DB;
@@ -114,7 +116,7 @@ class local_bs_badge_ladder_form extends moodleform {
             array('courseid' => $COURSE->id), MUST_EXIST);
         $values['anonymizestudentbadgeladder'] = $DB->get_field('local_badge_ladder', 'anonymize',
             array('courseid' => $COURSE->id), MUST_EXIST);
-		$values['coursebadgeladderperpage'] = $DB->get_field('local_badge_ladder', 'perpage',
+        $values['coursebadgeladderperpage'] = $DB->get_field('local_badge_ladder', 'perpage',
             array('courseid' => $COURSE->id), MUST_EXIST);
 
         parent::set_data($values);

@@ -27,11 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_local_bs_badge_ladder_upgrade($oldversion) {
     global $DB;
 
-	$dbman = $DB->get_manager();
-	$courses = $DB->get_records('course', null, '', 'id');
+    $dbman = $DB->get_manager();
+    $courses = $DB->get_records('course', null, '', 'id');
 
     if ($oldversion < 2017080400) {
-        
+
 		$table = new xmldb_table('local_badge_ladder');
         $field = new xmldb_field('perpage');
         $field->set_attributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'anonymize');
@@ -39,16 +39,16 @@ function xmldb_local_bs_badge_ladder_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-		foreach ($courses as $course) {
+        foreach ($courses as $course) {
 
-			$record = new stdClass();
-			$record->id = $DB->get_field('local_badge_ladder', 'id', array('courseid' => $course->id));
-			$record->courseid = $course->id;
-			$record->perpage = 20;
-			$DB->update_record('local_badge_ladder', $record);
-		}
-		
-		upgrade_plugin_savepoint(true, 2017080400, 'local', 'local_bs_badge_ladder');
+            $record = new stdClass();
+            $record->id = $DB->get_field('local_badge_ladder', 'id', array('courseid' => $course->id));
+            $record->courseid = $course->id;
+            $record->perpage = 20;
+            $DB->update_record('local_badge_ladder', $record);
+        }
+
+        upgrade_plugin_savepoint(true, 2017080400, 'local', 'local_bs_badge_ladder');
 
     }
 

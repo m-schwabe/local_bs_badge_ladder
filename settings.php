@@ -25,14 +25,14 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-	
-	$ADMIN->add('localplugins', new admin_category('local_bs_badge_ladder_folder',
+
+    $ADMIN->add('localplugins', new admin_category('local_bs_badge_ladder_folder',
                 get_string('pluginname', 'local_bs_badge_ladder')));
 
-	$settings = new admin_settingpage('local_bs_badge_ladder', get_string('configuration', 'local_bs_badge_ladder'));
+    $settings = new admin_settingpage('local_bs_badge_ladder', get_string('configuration', 'local_bs_badge_ladder'));
 
 
-	// Site badge ladder.
+    // Site badge ladder.
     $settings->add(new admin_setting_heading('local_bs_badge_ladder_systemladder',
         get_string('systemladderhead', 'local_bs_badge_ladder'), ''));
 
@@ -43,18 +43,18 @@ if ($hassiteconfig) {
         get_string('anonymizesystemstudentbadgeladder', 'local_bs_badge_ladder'),
         get_string('anonymizesystemstudentbadgeladderinfo', 'local_bs_badge_ladder'), 1));
 
-	$settings->add(new admin_setting_configtext('local_bs_badge_ladder/systembadgeladderperpage',
-		get_string('sitebadgeladderperpage', 'local_bs_badge_ladder'),
+    $settings->add(new admin_setting_configtext('local_bs_badge_ladder/systembadgeladderperpage',
+        get_string('sitebadgeladderperpage', 'local_bs_badge_ladder'),
         get_string('sitebadgeladderperpagedesc', 'local_bs_badge_ladder'), 10, PARAM_INT));
 
 
-	// Course badge ladder.
+    // Course badge ladder.
     $settings->add(new admin_setting_heading('local_bs_badge_ladder_courseladder',
         get_string('courseladderhead', 'local_bs_badge_ladder'), ''));
 
     $settings->add(new admin_setting_configcheckbox('local_bs_badge_ladder/enablecourseladder',
         get_string('courseladder', 'local_bs_badge_ladder'), get_string('courseladderinfo', 'local_bs_badge_ladder'), 1));
-		
+
     $options = array('0' => get_string('disabled', 'local_bs_badge_ladder'),
         '1' => get_string('enabled', 'local_bs_badge_ladder'));
 
@@ -74,7 +74,7 @@ if ($hassiteconfig) {
         get_string('anonymizestudentladderdefaultinfo', 'local_bs_badge_ladder'), '0', $options2));
 
 
-	$ADMIN->add('local_bs_badge_ladder_folder', $settings);
+    $ADMIN->add('local_bs_badge_ladder_folder', $settings);
 
     $ADMIN->add('local_bs_badge_ladder_folder', new admin_externalpage('local_bs_badge_ladder_about',
                 get_string('about', 'local_bs_badge_ladder'),
