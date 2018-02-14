@@ -48,7 +48,7 @@ function local_bs_badge_ladder_extend_navigation ($nav) {
         } else {
             $navtext = get_string('viewcourseladderdisabled', 'local_bs_badge_ladder');
         }
-        $coursenode->get('coursebadges')->add($navtext, $url,
+        $coursenode->add($navtext, $url,
             navigation_node::TYPE_SETTING, null, 'viewcourseladder', new pix_icon('i/badge', get_string('badgesview', 'badges')));
     }
 
