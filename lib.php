@@ -52,7 +52,7 @@ function local_bs_badge_ladder_extend_navigation ($nav) {
             navigation_node::TYPE_SETTING, null, 'viewcourseladder', new pix_icon('i/badge', get_string('badgesview', 'badges')));
     }
 
-    // Show link to system badge ladder.
+    // Show link to site badge ladder.
     if (isloggedin()
         and !isguestuser()
         and isset(get_config('local_bs_badge_ladder')->enablesystemladder)
@@ -60,8 +60,14 @@ function local_bs_badge_ladder_extend_navigation ($nav) {
 
         $url = new moodle_url('/local/bs_badge_ladder/index.php', array('type' => 1));
         $coursenode = $nav->find(SITEID, $nav::TYPE_COURSE);
-        $coursenode->add(get_string('viewsystemladder', 'local_bs_badge_ladder'),
-        $url, $nav::TYPE_CONTAINER, null, 'viewsystemladder', new pix_icon('i/badge', get_string('badgesview', 'badges')));
+
+        if (!get_config('local_bs_badge_ladder')->systemladderdisplaylink) {
+            $coursenode->add(get_string('viewsystemladder', 'local_bs_badge_ladder'),
+            $url, $nav::TYPE_CONTAINER, null, 'viewsystemladder', new pix_icon('i/badge', get_string('badgesview', 'badges')));
+        } else { // Show link on Boost based theme.
+            $node = $coursenode->add(get_string('viewsystemladder', 'local_bs_badge_ladder'), $url, $nav::TYPE_CUSTOM, null, 'viewsystemladder');
+            $node->showinflatnavigation = true;
+        }
     }
 }
 

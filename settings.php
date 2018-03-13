@@ -46,6 +46,13 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configtext('local_bs_badge_ladder/systembadgeladderperpage',
         get_string('sitebadgeladderperpage', 'local_bs_badge_ladder'),
         get_string('sitebadgeladderperpagedesc', 'local_bs_badge_ladder'), 10, PARAM_INT));
+        
+    $options3 = array('0' => get_string('displaylink_normal', 'local_bs_badge_ladder'),
+        '1' => get_string('displaylink_alternate', 'local_bs_badge_ladder'));
+
+    $settings->add(new admin_setting_configselect('local_bs_badge_ladder/systemladderdisplaylink',
+        get_string('systemladderdisplaylink', 'local_bs_badge_ladder'),
+        get_string('systemladderdisplaylinkinfo', 'local_bs_badge_ladder'), '0', $options3));
 
 
     // Course badge ladder.
