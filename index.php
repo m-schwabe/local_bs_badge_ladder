@@ -185,16 +185,20 @@ if ($mode == 1) {
 
     foreach ($students as $student) {
 
-        $studentbadges = $DB->get_records('badge_issued', array('userid' => $student->id));
-        $badgescount = 0;
-        foreach ($studentbadges as $sb) {
-            if ($DB->get_record('badge', array('id' => $sb->badgeid, 'courseid' => $badgecourseid))) {
-                $badgescount++;
+        if (is_siteadmin($student) or isguestuser()) {
+            unset($students[$student->id]); // No admins or guests in student badge ladder.
+        } else {
+            $studentbadges = $DB->get_records('badge_issued', array('userid' => $student->id));
+            $badgescount = 0;
+            foreach ($studentbadges as $sb) {
+                if ($DB->get_record('badge', array('id' => $sb->badgeid, 'courseid' => $badgecourseid))) {
+                    $badgescount++;
+                }
             }
+            $student->badgescount = $badgescount;
         }
-        $student->badgescount = $badgescount;
-
     }
+
     usort($students, function($b, $a) {
         if ((int)$a->badgescount == (int)$b->badgescount) { return  0; }
         if ((int)$a->badgescount  > (int)$b->badgescount) { return  1; }
