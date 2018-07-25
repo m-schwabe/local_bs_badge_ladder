@@ -69,3 +69,4 @@ $string['displaylink_normal'] = 'standard';
 $string['displaylink_alternate'] = 'alternate';
 $string['systemladderdisplaylink'] = 'Link display mode';
 $string['systemladderdisplaylinkinfo'] = 'If you are using a theme based on Boost you should select \'alternate\' to display a link to the site badge ladder';
+$string['privacy:metadata'] = 'The Badge Ladder plugin does not store any personal data.';
